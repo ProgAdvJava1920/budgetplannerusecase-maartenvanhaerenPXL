@@ -1,6 +1,11 @@
 package be.pxl.student;
 
-public class BudgetPlanner {
+import be.pxl.student.util.BudgetPlannerImporter;
 
+public class BudgetPlanner {
+    public static void main(String[] args) {
+        BudgetPlannerImporter importer = new BudgetPlannerImporter("src\\main\\resources\\account_payments.csv");
+        System.out.println(importer.ReadFile());
+    }
 
 }
