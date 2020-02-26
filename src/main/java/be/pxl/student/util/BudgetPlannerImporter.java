@@ -63,7 +63,7 @@ public class BudgetPlannerImporter {
     }
 
     private Payment CreatePayment(String[] splitedString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         Payment payment = new Payment(LocalDateTime.parse(splitedString[3], formatter), Float.parseFloat(splitedString[4]), splitedString[5], splitedString[6]);
         return payment;
     }
