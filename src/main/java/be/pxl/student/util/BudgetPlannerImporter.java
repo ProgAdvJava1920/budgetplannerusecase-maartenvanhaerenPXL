@@ -20,14 +20,15 @@ import java.util.Locale;
  */
 public class BudgetPlannerImporter {
 
-    private String _filename;
+    //private String _filename;
     private Account account;
 
-    public BudgetPlannerImporter(String filename){
-        _filename = filename;
-    };
+    public BudgetPlannerImporter(){};
+    //public BudgetPlannerImporter(String filename){
+    //    _filename = filename;
+    //};
 
-    public List<Payment> ReadFile(){
+    public Account ReadFile( String _filename){
         Path path = Paths.get(_filename);
         List<Payment> payments = new ArrayList<>();
         try {
@@ -50,7 +51,7 @@ public class BudgetPlannerImporter {
         }finally {
 
         }
-        return payments;
+        return account;
     }
 
     //Account name,Account IBAN,Counteraccount IBAN,Transaction date,Amount,Currency,Detail
