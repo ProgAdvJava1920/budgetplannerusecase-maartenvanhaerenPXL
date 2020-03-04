@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="MariaDB - musicdb@localhost" uuid="391d0308-cb3e-4776-a4e5-b2904edde5ee">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://localhost:3306/musicdb</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="budgetplanner@localhost" uuid="da8ef091-bb33-418e-8050-c273a37a0a80">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/budgetplanner</jdbc-url>
+    </data-source>
+  </component>
+</project>
