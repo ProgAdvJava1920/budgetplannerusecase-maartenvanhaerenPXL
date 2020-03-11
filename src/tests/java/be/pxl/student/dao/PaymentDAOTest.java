@@ -1,6 +1,8 @@
 package be.pxl.student.dao;
 
+import be.pxl.student.entity.Account;
 import be.pxl.student.entity.Payment;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -32,10 +34,22 @@ public class PaymentDAOTest {
     }
     @Test
     public void testPaymentUpdate(){
-
+        payment.setCurrency("EUR");
+        payment.setId(1);
+        payment.setLabelId(1);
+        payment.setCounterAccountId(1);
+        payment.setId(1);
+        payment.setAmount(10000);
+        payment.setDate(LocalDateTime.now());
+        payment.setDetail("test value, Amount update");
+        paymentDAO.updatePayment(payment);
+        Payment updatedPayment = paymentDAO.readPayment(1);
+        Assertions.assertEquals(payment.getAmount(), updatedPayment.getAmount());
+        System.out.println(updatedPayment);
     }
     @Test
     public void testPaymentDelete(){
+
 
     }
     @Test
@@ -44,4 +58,5 @@ public class PaymentDAOTest {
         assertNotEquals(null, paymentRead);
         System.out.println(paymentRead);
     }
+
 }
