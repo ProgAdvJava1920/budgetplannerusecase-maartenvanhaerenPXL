@@ -2,6 +2,7 @@ package be.pxl.student.dao;
 
 import be.pxl.student.entity.Account;
 import com.mysql.cj.x.protobuf.MysqlxCrud;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -27,11 +28,10 @@ public class AccountDAOTest {
         account.setIBAN("testIBAN");
         account.setName("testNameAangepast");
         account.setId(2);
-
-        boolean uitgevoerd = accountDAO.updateAccount(account);
-        assertNotEquals(false, uitgevoerd);
-        //assert
-        System.out.println(uitgevoerd);
+        accountDAO.updateAccount(account);
+        Account UpdatedAccount = accountDAO.readAccount(2);
+        Assertions.assertEquals(UpdatedAccount.getName(), account.getName());
+        System.out.println("Name:" + UpdatedAccount.getName() + ", IBAN: " + UpdatedAccount.getIBAN());
 
     }
     @Test
@@ -41,8 +41,9 @@ public class AccountDAOTest {
         Account willBeDelet = accountDAO.createAccount(account);
         System.out.println("Id:" + willBeDelet.getId() +", name:"+ willBeDelet.getName());
         boolean isDelete = accountDAO.deleteAccount(willBeDelet.getId());
-        assertNotEquals(false, isDelete);
-        System.out.println("uitkomst: " + isDelete);
+        Account deletedAccount = accountDAO.readAccount(willBeDelet.getId());
+        Assertions.assertEquals(null, deletedAccount);
+        System.out.println("uitkomst: " + deletedAccount);
 
 
     }
