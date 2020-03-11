@@ -1,4 +1,4 @@
-package be.pxl.student;
+package be.pxl.student.DAO;
 
 import be.pxl.student.DAO.AccountDAO;
 import be.pxl.student.entity.Account;
@@ -21,4 +21,5 @@ public class AccountDAOTest {
         assertNotEquals(0,accountInserted.getId());
         System.out.println(accountInserted.getId());
     }
+
 }
