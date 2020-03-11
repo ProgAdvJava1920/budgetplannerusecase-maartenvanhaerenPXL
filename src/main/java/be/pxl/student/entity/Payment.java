@@ -11,6 +11,24 @@ public class Payment {
     private String currency;
     private String detail;
     private int id;
+    private int counterAccountId;
+    private int labelId;
+
+    public int getLabelId() {
+        return labelId;
+    }
+
+    public void setLabelId(int labelId) {
+        this.labelId = labelId;
+    }
+
+    public int getCounterAccountId() {
+        return counterAccountId;
+    }
+
+    public void setCounterAccountId(int counterAccountId) {
+        this.counterAccountId = counterAccountId;
+    }
 
     public int getId() {
         return id;

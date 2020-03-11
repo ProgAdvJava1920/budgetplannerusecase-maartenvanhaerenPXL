@@ -6,9 +6,9 @@ import java.sql.*;
 
 public class PaymentDAO {
 
-    private static final String SELECT_BY_ID = "SELECT * FROM Account WHERE id = ?";
-    private static final String UPDATE = "UPDATE Payment SET date=?, amount=?, currency=?, detail=? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Payment (date , amount, currency, detail) VALUES (?, ?, ?,?)";
+    private static final String SELECT_BY_ID = "SELECT * FROM Payment WHERE id = ?";
+    private static final String UPDATE = "UPDATE Payment SET date=?, amount=?, currency=?, detail=?, accountId=?, counterAccountId=?, labelId=? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO Payment (date, amount, currency, detail, accountId, counterAccountId) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM Payment WHERE id = ?";
     private String url;
     private String user;
@@ -24,10 +24,13 @@ public class PaymentDAO {
     public Payment createPayment(Payment payment) {
 
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setObject(1, payment.getDate());
+            stmt.setDate(1, java.sql.Date.valueOf(payment.getDate().toLocalDate()));
             stmt.setFloat(2, payment.getAmount());
             stmt.setString(3, payment.getCurrency());
             stmt.setString(4, payment.getDetail());
+            stmt.setInt(5, payment.getId());
+            stmt.setInt(6, payment.getCounterAccountId());
+            //stmt.setInt(7, payment.getLabelId());
             if (stmt.executeUpdate() == 1) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -40,16 +43,18 @@ public class PaymentDAO {
             ex.printStackTrace();
         }
         return null;
-
-
     }
 
     public boolean updatePayment(Payment payment) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
-            stmt.setObject(1, payment.getDate());
+            stmt.setDate(1, java.sql.Date.valueOf(payment.getDate().toLocalDate()));
             stmt.setFloat(2, payment.getAmount());
             stmt.setString(3, payment.getCurrency());
             stmt.setString(4, payment.getDetail());
+            stmt.setInt(5, payment.getId());
+            stmt.setInt(6, payment.getCounterAccountId());
+            stmt.setInt(7, payment.getLabelId());
+            stmt.setInt(8, payment.getId());
             return stmt.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -59,7 +64,7 @@ public class PaymentDAO {
 
     public boolean deletePayment(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(DELETE)) {
-            stmt.setInt(4, id);
+            stmt.setInt(1, id);
             return stmt.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -82,11 +87,13 @@ public class PaymentDAO {
 
     public Payment mapPayment(ResultSet rs) throws SQLException {
         Payment payment = new Payment();
-        payment.setDate(rs.getDate("date").toLocalDate().atTime(rs.getTime("date").toLocalTime()));
-        payment.setAmount(rs.getFloat("amount"));
-        payment.setCurrency(rs.getString("currency"));
         payment.setDetail(rs.getString("detail"));
-        payment.setId(rs.getInt("id"));
+        payment.setDate(rs.getDate("date").toLocalDate().atTime(rs.getTime("date").toLocalTime()));
+        payment.setCurrency(rs.getString("currency"));
+        payment.setAmount(rs.getFloat("amount"));
+        payment.setId(rs.getInt("accountId"));
+        payment.setCounterAccountId(rs.getInt("counterAccountId"));
+        payment.setLabelId(rs.getInt("labelId"));
         return payment;
     }
 

@@ -29,7 +29,7 @@ public class AccountDAOTest {
         account.setId(2);
 
         boolean uitgevoerd = accountDAO.updateAccount(account);
-        assertTrue(uitgevoerd);
+        assertNotEquals(false, uitgevoerd);
         //assert
         System.out.println(uitgevoerd);
 
@@ -39,9 +39,9 @@ public class AccountDAOTest {
         account.setName("Delete");
         account.setIBAN("Delete");
         Account willBeDelet = accountDAO.createAccount(account);
-        System.out.println("Id:" + willBeDelet.getId() + ", name:" + willBeDelet.getName());
+        System.out.println("Id:" + willBeDelet.getId() +", name:"+ willBeDelet.getName());
         boolean isDelete = accountDAO.deleteAccount(willBeDelet.getId());
-        assertTrue(isDelete);
+        assertNotEquals(false, isDelete);
         System.out.println("uitkomst: " + isDelete);
 
 

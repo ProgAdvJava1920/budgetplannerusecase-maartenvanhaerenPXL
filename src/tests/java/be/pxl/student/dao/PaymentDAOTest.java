@@ -11,19 +11,37 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class PaymentDAOTest {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+    Payment payment = new Payment();
+    PaymentDAO paymentDAO = new PaymentDAO("jdbc:mysql://localhost:3306/budgetplanner?useSSL=false", "root", "admin");
     @Test
     public void testPaymentInsert(){
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.parse("Wed Feb 26 06:41:27 CET 2020", formatter));
-        payment.setAmount(1000);
-        payment.setCurrency("EUR");
-        payment.setDetail("Detail");
 
-        PaymentDAO paymentDAO=new PaymentDAO("jdbc:mysql://localhost:3306/budgetplanner?useSSL=false", "root", "admin");
+        payment.setCurrency("EUR");
+        payment.setId(1);
+        payment.setLabelId(1);
+        payment.setCounterAccountId(1);
+        payment.setId(1);
+        payment.setAmount(200);
+        payment.setDate(LocalDateTime.now());
+        payment.setDetail("test value");
 
         Payment paymentInserted = paymentDAO.createPayment(payment);
-        //assertEquals(account,accountInserted);
-        assertNotEquals(0,paymentInserted.getId());
-        System.out.println(paymentInserted.getId());
+        assertNotEquals(0, paymentInserted.getId());
+        System.out.println("ID: " + paymentInserted.getId());;
+        System.out.println(paymentInserted);
+    }
+    @Test
+    public void testPaymentUpdate(){
+
+    }
+    @Test
+    public void testPaymentDelete(){
+
+    }
+    @Test
+    public void testPaymentRead(){
+        Payment paymentRead = paymentDAO.readPayment(1);
+        assertNotEquals(null, paymentRead);
+        System.out.println(paymentRead);
     }
 }
