@@ -56,7 +56,7 @@ public class AccountDAO {
 
     public boolean deleteAccount(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(DELETE)) {
-            stmt.setInt(4, id);
+            stmt.setInt(1, id);
             return stmt.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
