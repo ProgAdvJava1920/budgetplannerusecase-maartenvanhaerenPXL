@@ -13,20 +13,23 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class PaymentDAOTest {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-    Payment payment = new Payment();
+    Payment payment;
     PaymentDAO paymentDAO = new PaymentDAO("jdbc:mysql://localhost:3306/budgetplanner?useSSL=false", "root", "admin");
-    @Test
-    public void testPaymentInsert(){
-
+    private Payment testpayment(String detail, float amount){
+        Payment payment = new Payment();
         payment.setCurrency("EUR");
         payment.setId(1);
         payment.setLabelId(1);
         payment.setCounterAccountId(1);
         payment.setId(1);
-        payment.setAmount(200);
+        payment.setAmount(amount);
         payment.setDate(LocalDateTime.now());
-        payment.setDetail("test value");
-
+        payment.setDetail(detail);
+        return payment;
+    }
+    @Test
+    public void testPaymentInsert(){
+        payment = testpayment("test payment", 200);
         Payment paymentInserted = paymentDAO.createPayment(payment);
         assertNotEquals(0, paymentInserted.getId());
         System.out.println("ID: " + paymentInserted.getId());;
@@ -34,14 +37,8 @@ public class PaymentDAOTest {
     }
     @Test
     public void testPaymentUpdate(){
-        payment.setCurrency("EUR");
+        payment = testpayment("test payment update amount", 100000);
         payment.setId(1);
-        payment.setLabelId(1);
-        payment.setCounterAccountId(1);
-        payment.setId(1);
-        payment.setAmount(10000);
-        payment.setDate(LocalDateTime.now());
-        payment.setDetail("test value, Amount update");
         paymentDAO.updatePayment(payment);
         Payment updatedPayment = paymentDAO.readPayment(1);
         Assertions.assertEquals(payment.getAmount(), updatedPayment.getAmount());
@@ -49,12 +46,7 @@ public class PaymentDAOTest {
     }
     @Test
     public void testPaymentDelete(){
-        payment.setCurrency("EUR");
-        payment.setId(1);
-        payment.setCounterAccountId(2);
-        payment.setAmount(10000);
-        payment.setDate(LocalDateTime.now());
-        payment.setDetail("test value, payment delete");
+        payment = testpayment("test payment Delete", 200);
         Payment createdPayment = paymentDAO.createPayment(payment);
         System.out.println("id:" + createdPayment.getId());
         paymentDAO.deletePayment(payment.getId());
