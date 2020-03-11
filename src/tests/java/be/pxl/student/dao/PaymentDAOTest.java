@@ -49,6 +49,18 @@ public class PaymentDAOTest {
     }
     @Test
     public void testPaymentDelete(){
+        payment.setCurrency("EUR");
+        payment.setId(1);
+        payment.setCounterAccountId(2);
+        payment.setAmount(10000);
+        payment.setDate(LocalDateTime.now());
+        payment.setDetail("test value, payment delete");
+        Payment createdPayment = paymentDAO.createPayment(payment);
+        System.out.println("id:" + createdPayment.getId());
+        paymentDAO.deletePayment(payment.getId());
+        Payment deletedPayment = paymentDAO.readPayment(createdPayment.getId());
+        Assertions.assertEquals(null, deletedPayment);
+        System.out.println(deletedPayment);
 
 
     }
