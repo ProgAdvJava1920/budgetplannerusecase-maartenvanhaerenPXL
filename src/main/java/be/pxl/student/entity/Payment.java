@@ -10,7 +10,16 @@ public class Payment {
     private float amount;
     private String currency;
     private String detail;
+    private int id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public Payment(){}
     public Payment(LocalDateTime date, float amount, String currency, String detail) {
         this.date = date;
         this.amount = amount;
