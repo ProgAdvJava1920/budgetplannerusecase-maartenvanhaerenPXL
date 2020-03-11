@@ -1,36 +1,38 @@
-package be.pxl.student.DAO;
+package be.pxl.student.dao;
 
-import be.pxl.student.entity.Account;
+import be.pxl.student.entity.Payment;
 
 import java.sql.*;
 
-public class AccountDAO {
+public class PaymentDAO {
 
     private static final String SELECT_BY_ID = "SELECT * FROM Account WHERE id = ?";
-    private static final String UPDATE = "UPDATE Account SET name=?, IBAN=? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO Account (name, IBAN) VALUES (?, ?)";
-    private static final String DELETE = "DELETE FROM Account WHERE id = ?";
+    private static final String UPDATE = "UPDATE Payment SET date=?, amount=?, currency=?, detail=? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO Payment (date , amount, currency, detail) VALUES (?, ?, ?,?)";
+    private static final String DELETE = "DELETE FROM Payment WHERE id = ?";
     private String url;
     private String user;
     private String password;
 
-    public AccountDAO(String url, String user, String password) {
+    public PaymentDAO(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
     }
 
 
-    public Account createAccount(Account account) {
+    public Payment createPayment(Payment payment) {
 
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getIBAN());
+            stmt.setObject(1, payment.getDate());
+            stmt.setFloat(2, payment.getAmount());
+            stmt.setString(3, payment.getCurrency());
+            stmt.setString(4, payment.getDetail());
             if (stmt.executeUpdate() == 1) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        account.setId(rs.getInt(1));
-                        return account;
+                        payment.setId(rs.getInt(1));
+                        return payment;
                     }
                 }
             }
@@ -42,11 +44,12 @@ public class AccountDAO {
 
     }
 
-    public boolean updateAccount(Account account) {
+    public boolean updatePayment(Payment payment) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getIBAN());
-            stmt.setInt(3, account.getId());
+            stmt.setObject(1, payment.getDate());
+            stmt.setFloat(2, payment.getAmount());
+            stmt.setString(3, payment.getCurrency());
+            stmt.setString(4, payment.getDetail());
             return stmt.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -54,7 +57,7 @@ public class AccountDAO {
         return false;
     }
 
-    public boolean deleteAccount(int id) {
+    public boolean deletePayment(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(DELETE)) {
             stmt.setInt(4, id);
             return stmt.execute();
@@ -64,12 +67,12 @@ public class AccountDAO {
         return false;
     }
 
-    public Account readAccount(int id) {
+    public Payment readPayment(int id) {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(SELECT_BY_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return mapAccount(rs);
+                return mapPayment(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -77,12 +80,14 @@ public class AccountDAO {
         return null;
     }
 
-    public Account mapAccount(ResultSet rs) throws SQLException {
-        Account account = new Account();
-        account.setName(rs.getString("name"));
-        account.setIBAN(rs.getString("iban"));
-        account.setId(rs.getInt("id"));
-        return account;
+    public Payment mapPayment(ResultSet rs) throws SQLException {
+        Payment payment = new Payment();
+        payment.setDate(rs.getDate("date").toLocalDate().atTime(rs.getTime("date").toLocalTime()));
+        payment.setAmount(rs.getFloat("amount"));
+        payment.setCurrency(rs.getString("currency"));
+        payment.setDetail(rs.getString("detail"));
+        payment.setId(rs.getInt("id"));
+        return payment;
     }
 
     private Connection getConnection() throws SQLException {

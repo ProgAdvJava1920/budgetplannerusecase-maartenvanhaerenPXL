@@ -1,6 +1,5 @@
-package be.pxl.student.DAO;
+package be.pxl.student.dao;
 
-import be.pxl.student.DAO.AccountDAO;
 import be.pxl.student.entity.Account;
 import org.junit.jupiter.api.Test;
 
